@@ -53,7 +53,7 @@ def run_continuously(interval=1):
 def check_job_allocations():
     logger.info(gpu_manager.get_gpu_allocations())
     if queue.is_empty():
-        # logger.info(f"No Jobs to run")
+        logger.info(f"No Jobs to run")
         return
     logger.info(f"{queue.size()} Jobs to queue")
     if not (gpu := gpu_manager.get_any_available_gpu()):
@@ -124,13 +124,13 @@ def delete_command():
 
 if __name__ == "__main__":
     """Read command line arguments and start reading from stdin."""
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument("--gpus", nargs="+", type=str, required=True)
-    # parser.add_argument("--jobs_per_gpu", type=int, required=True)
-    # args = parser.parse_args()
-    # # Support both comma separated and individually passed GPU ids
-    # gpus = args.gpus if len(args.gpus) > 1 else args.gpus[0].split(",")
-    gpu_manager = GPUManager(["0", "1"], 3)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gpus", nargs="+", type=str, required=True)
+    parser.add_argument("--jobs_per_gpu", type=int, required=True)
+    args = parser.parse_args()
+    # Support both comma separated and individually passed GPU ids
+    gpus = args.gpus if len(args.gpus) > 1 else args.gpus[0].split(",")
+    gpu_manager = GPUManager(gpus, args.jobs_per_gpu)
     queue = CommandQueue()
 
     app.run(port=8000)
