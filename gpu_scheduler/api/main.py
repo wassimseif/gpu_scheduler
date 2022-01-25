@@ -64,7 +64,7 @@ def check_job_allocations():
     queue.dequeue()
 
 
-schedule.every(5).seconds.do(check_job_allocations)
+schedule.every(60).seconds.do(check_job_allocations)
 stop_run_continuously = run_continuously()
 
 
@@ -134,8 +134,9 @@ def main():
     queue = CommandQueue()
     if not gpu_manager or not queue:
         logger.error("Something went wrong with initialization")
-    from waitress import serve
-    serve(app, port=8000)
+    app.run(port=8000)
+    # from waitress import serve
+    # serve(app, port=8000)
 
 
 

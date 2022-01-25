@@ -18,8 +18,7 @@ def configure_logger():
     sh.setFormatter(formatter)
 
     if not logger.handlers:
-        # logger.addHandler(sh)
-        logger.addHandler(fh)
+        logger.addHandler(sh)
         logger.addHandler(fh)
 
     return logger
