@@ -27,6 +27,9 @@ class GPUManager:
                 return id_
         return None
 
+    def get_gpu_allocations(self) -> Dict:
+        return self.job_per_gpu
+
     def allocate_job(self, command: str, gpu: str) -> bool:
         self.run_command_with_gpu(command, gpu)
         self.job_per_gpu[gpu] += 1

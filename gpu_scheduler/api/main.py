@@ -2,6 +2,7 @@
 from copy import copy
 import threading
 import time
+from typing import Dict
 import argparse
 
 # Project Dependencies
@@ -20,7 +21,7 @@ queue = None
 gpu_manager = None
 
 
-def mk_error_object(msg: str):
+def mk_error_object(msg: str) -> Dict:
     return {"status": "error", "msg": msg}
 
 
@@ -50,8 +51,9 @@ def run_continuously(interval=1):
 
 
 def check_job_allocations():
+    logger.info(gpu_manager.get_gpu_allocations())
     if queue.is_empty():
-        logger.info(f"No Jobs to run")
+        # logger.info(f"No Jobs to run")
         return
     logger.info(f"{queue.size()} Jobs to queue")
     if not (gpu := gpu_manager.get_any_available_gpu()):
@@ -62,9 +64,9 @@ def check_job_allocations():
     queue.dequeue()
 
 
-
 schedule.every(5).seconds.do(check_job_allocations)
 stop_run_continuously = run_continuously()
+
 
 @app.get("/")
 def root():
@@ -81,10 +83,14 @@ def add_command():
     com = request.form["command"]
 
     obj = Command(com)
-    logger.info(
-        f"Added Command {str(obj)} - Before size {queue.size()} - After size {queue.size()} "
-    )
+
+    bs = queue.size()
+
     queue.enqueue(obj)
+    logger.info(
+        f"Added Command {str(obj)} - Before size {bs} - After size "
+        f"{queue.size()} "
+    )
     return obj.to_json()
 
 
@@ -116,7 +122,6 @@ def delete_command():
     return jsonify(mk_error_object(f"Element could not be found "), 400)
 
 
-
 if __name__ == "__main__":
     """Read command line arguments and start reading from stdin."""
     # parser = argparse.ArgumentParser()
@@ -127,6 +132,5 @@ if __name__ == "__main__":
     # gpus = args.gpus if len(args.gpus) > 1 else args.gpus[0].split(",")
     gpu_manager = GPUManager(["0", "1"], 3)
     queue = CommandQueue()
-
 
     app.run(port=8000)
