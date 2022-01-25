@@ -132,8 +132,11 @@ def main():
     gpus = args.gpus if len(args.gpus) > 1 else args.gpus[0].split(",")
     gpu_manager = GPUManager(gpus, args.jobs_per_gpu)
     queue = CommandQueue()
+    if not gpu_manager or not queue:
+        logger.error("Something went wrong with initialization")
+    from waitress import serve
+    serve(app, port=8000)
 
-    app.run(port=8000)
 
 
 # if __name__ == "__main__":
