@@ -9,7 +9,7 @@ def configure_logger():
     logger = logging.getLogger(__name__)
     formatter = logging.Formatter("[%(levelname)s] - %(asctime)s - : %(message)s")
 
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.ERROR)
 
     fh = logging.FileHandler("scheduler.log", mode="w")
     fh.setFormatter(formatter)

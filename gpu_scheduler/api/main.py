@@ -52,10 +52,10 @@ def run_continuously(interval=1):
 
 def check_job_allocations():
     logger.info(gpu_manager.get_gpu_allocations())
-    if queue.is_empty():
-        logger.info(f"No Jobs to run")
-        return
     logger.info(f"{queue.size()} Jobs to queue")
+    if queue.is_empty():
+        return
+
     if not (gpu := gpu_manager.get_any_available_gpu()):
         logger.info(f"No GPUs available now")
         return
@@ -121,8 +121,8 @@ def delete_command():
         return {"success": True}
     return jsonify(mk_error_object(f"Element could not be found "), 400)
 
-
-if __name__ == "__main__":
+def main():
+    global gpu_manager, queue
     """Read command line arguments and start reading from stdin."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--gpus", nargs="+", type=str, required=True)
@@ -134,3 +134,7 @@ if __name__ == "__main__":
     queue = CommandQueue()
 
     app.run(port=8000)
+
+
+# if __name__ == "__main__":
+#     main()

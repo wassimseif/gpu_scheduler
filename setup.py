@@ -1,29 +1,26 @@
-from setuptools import setup
+import setuptools
 
-
-def read_readme():
-    with open("README.md") as f:
-        return f.read()
-
-setup(
-    name="gpu_scheduler",
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+setuptools.setup(
+    name="wwgs",  # Replace with your own username
     version="0.0.1",
-    description="A scheduler for running commands on multiple GPUs.",
-    long_description=read_readme(),
-    long_description_content_type="text/markdown",
-    url="https://github.com/wassimseif/",
     author="Wassim Seifeddine",
     author_email="wassim@wassimseifeddine.com",
-    packages=["gpu_scheduler"],
-    python_requires=">3.8",
+    description="",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/wassimseif/gpu_scheduler",
+    packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.6",
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
     ],
+    python_requires=">=3.6",
     entry_points={
         "console_scripts": [
-            "gpu_scheduler=gpu_scheduler.api:main",
+            "wwgs = gpu_scheduler.api.main:main",
         ],
     },
     zip_safe=False,
